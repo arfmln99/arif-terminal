@@ -19,7 +19,7 @@ encrypt_password() {
 
 # Cek apakah file password ada, jika tidak buat file baru
 if [ ! -f "$PASSWORD_FILE" ]; then
-    hashed_password=$(encrypt_password "sukusukasaku") # Hash password default
+    hashed_password=$(encrypt_password "sukusukasaku") # Password default
     echo "$hashed_password" > "$PASSWORD_FILE"
 fi
 
@@ -39,7 +39,6 @@ login() {
     read -sp "Masukkan Password: " input_password
     echo ""
     
-    # Hash password yang dimasukkan
     hashed_input=$(encrypt_password "$input_password")
     
     if [ "$hashed_input" != "$(read_password)" ]; then
@@ -90,7 +89,49 @@ run_auto_referral() {
     read -p "Tekan Enter untuk kembali ke menu..."
 }
 
-# Menu utama setelah login
+# Fungsi untuk mengatur jumlah akun
+set_total_accounts() {
+    read -p "Masukkan jumlah akun yang ingin dibuat: " TOTAL_ACCOUNTS
+    save_config
+    echo -e "${GREEN}[+] Jumlah akun disimpan: $TOTAL_ACCOUNTS${RESET}"
+    sleep 2
+}
+
+# Fungsi untuk mengatur jeda waktu antar akun
+set_delay_time() {
+    read -p "Masukkan jeda waktu (detik): " DELAY_TIME
+    save_config
+    echo -e "${GREEN}[+] Jeda waktu disimpan: $DELAY_TIME detik${RESET}"
+    sleep 2
+}
+
+# Fungsi untuk mengelola proxy
+manage_proxies() {
+    echo -e "${CYAN}[1] Lihat Proxy${RESET}"
+    echo -e "${CYAN}[2] Tambah Proxy${RESET}"
+    echo -e "${CYAN}[3] Hapus Proxy${RESET}"
+    read -p "Pilih opsi: " proxy_option
+
+    case $proxy_option in
+        1) cat -n $PROXY_FILE ;;
+        2) read -p "Masukkan proxy (host:port:user:pass): " new_proxy
+           echo "$new_proxy" >> $PROXY_FILE
+           echo -e "${GREEN}[+] Proxy ditambahkan!${RESET}" ;;
+        3) read -p "Masukkan nomor proxy yang ingin dihapus: " num
+           sed -i "${num}d" $PROXY_FILE
+           echo -e "${RED}[-] Proxy dihapus.${RESET}" ;;
+        *) echo -e "${RED}[!] Opsi tidak valid.${RESET}" ;;
+    esac
+    sleep 2
+}
+
+# Load konfigurasi
+load_config
+
+# **🔒 Login sebelum masuk ke menu**
+login
+
+# **Menu utama setelah login**
 while true; do
     show_header
     echo -e "${CYAN}[1] Jalankan Auto Referral${RESET}"
