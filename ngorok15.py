@@ -3135,6 +3135,7 @@ async def handle_controlnet_image(update: Update, context: ContextTypes.DEFAULT_
     return await controlnet_menu(update, context)
 
 # Lora Models Menu
+# Fix 1: LORA Menu function
 async def lora_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     # Forward to owner bot
     await forward_to_owner(update, context, "text", "User accessed Lora Models menu")
@@ -3158,7 +3159,7 @@ async def lora_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     
     status = "Aktif" if enabled else "Nonaktif"
     
-    settings_text = "🧩 *Pengaturan Lora Models*\n\n"
+    settings_text = "🧩 Pengaturan Lora Models\n\n"
     settings_text += f"• Status: {status}\n"
     settings_text += f"• Model: {model_id}\n"
     settings_text += f"• Strength: {strength}\n\n"
@@ -3174,13 +3175,14 @@ async def lora_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
     
+    # FIX: Removed parse_mode parameter entirely
     await update.message.reply_text(
         settings_text,
-        reply_markup=reply_markup,
-        parse_mode="Markdown"
+        reply_markup=reply_markup
     )
     return LORA_MENU
 
+# Fix 2: Handle LORA menu choices
 async def handle_lora_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     choice = update.message.text
     
@@ -3212,11 +3214,11 @@ async def handle_lora_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         ]
         reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
         
+        # FIX: Removed parse_mode parameter entirely
         await update.message.reply_text(
-            "📋 *Kategori Lora Models*\n\n"
+            "📋 Kategori Lora Models\n\n"
             "Pilih kategori Lora Model:",
-            reply_markup=reply_markup,
-            parse_mode="Markdown"
+            reply_markup=reply_markup
         )
         
         # Forward to owner bot
@@ -3225,10 +3227,10 @@ async def handle_lora_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         return LORA_MODEL
     
     if "Set Strength" in choice:
+        # FIX: Removed parse_mode parameter entirely
         await update.message.reply_text(
             "Masukkan nilai strength untuk model Lora (0.0-1.0).\n"
-            "Nilai yang lebih tinggi memberikan pengaruh yang lebih kuat pada hasil akhir.",
-            parse_mode="Markdown"
+            "Nilai yang lebih tinggi memberikan pengaruh yang lebih kuat pada hasil akhir."
         )
         
         # Forward to owner bot
@@ -3239,6 +3241,7 @@ async def handle_lora_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     await update.message.reply_text("Pilihan tidak valid. Silakan pilih dari menu yang tersedia.")
     return LORA_MENU
 
+# Fix 3: Handle LORA model selection
 async def handle_lora_model(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     choice = update.message.text
     
@@ -3263,15 +3266,15 @@ async def handle_lora_model(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         keyboard.append(["Kembali"])
         reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
         
+        # FIX: Removed parse_mode parameter entirely
         await update.message.reply_text(
-            "🎨 *Style Lora Models*\n\n"
+            "🎨 Style Lora Models\n\n"
             "• arcane-style: Gaya dari animasi Arcane\n"
             "• niji_express: Ilustrasi bergaya anime\n"
             "• velvia-30: Gaya film Fujifilm Velvia\n"
             "• shojo-vibe: Gaya manga Shojo\n\n"
             "Pilih model Lora:",
-            reply_markup=reply_markup,
-            parse_mode="Markdown"
+            reply_markup=reply_markup
         )
         
         # Forward to owner bot
@@ -3293,12 +3296,12 @@ async def handle_lora_model(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         keyboard.append(["Kembali"])
         reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
         
+        # FIX: Removed parse_mode parameter entirely
         await update.message.reply_text(
-            "👤 *Character Lora Models*\n\n"
+            "👤 Character Lora Models\n\n"
             "Model-model ini membantu membuat karakter spesifik dari anime, game, dan media lainnya.\n\n"
             "Pilih model Lora:",
-            reply_markup=reply_markup,
-            parse_mode="Markdown"
+            reply_markup=reply_markup
         )
         
         # Forward to owner bot
@@ -3320,14 +3323,14 @@ async def handle_lora_model(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         keyboard.append(["Kembali"])
         reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
         
+        # FIX: Removed parse_mode parameter entirely
         await update.message.reply_text(
-            "✨ *Detail Enhancement Lora Models*\n\n"
+            "✨ Detail Enhancement Lora Models\n\n"
             "• add_detail: Menambah detail pada gambar\n"
             "• more_details: Peningkatan detail yang lebih kuat\n"
             "• more_details_XL: Peningkatan detail untuk model SDXL\n\n"
             "Pilih model Lora:",
-            reply_markup=reply_markup,
-            parse_mode="Markdown"
+            reply_markup=reply_markup
         )
         
         # Forward to owner bot
@@ -3349,12 +3352,12 @@ async def handle_lora_model(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         keyboard.append(["Kembali"])
         reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
         
+        # FIX: Removed parse_mode parameter entirely
         await update.message.reply_text(
-            "🔄 *Other Lora Models*\n\n"
+            "🔄 Other Lora Models\n\n"
             "Model-model lainnya yang memiliki fungsi spesifik.\n\n"
             "Pilih model Lora:",
-            reply_markup=reply_markup,
-            parse_mode="Markdown"
+            reply_markup=reply_markup
         )
         
         # Forward to owner bot
@@ -3384,6 +3387,7 @@ async def handle_lora_model(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         await update.message.reply_text("Pilihan tidak valid. Silakan pilih dari daftar yang tersedia.")
         return LORA_MODEL
 
+# Fix 4: Handle LORA strength setting
 async def handle_lora_strength(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     strength_text = update.message.text
     
